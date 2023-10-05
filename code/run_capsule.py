@@ -1,7 +1,45 @@
 """ top level run script """
+import logging
+import os
+
+from aind_smartspim_validation.validate import (validate_dataset_metadata,
+                                                validate_image_dataset)
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(levelname)s : %(message)s",
+    datefmt="%Y-%m-%d %H:%M",
+    handlers=[
+        logging.StreamHandler(),
+        # logging.FileHandler("test.log", "a"),
+    ],
+)
+logging.disable("DEBUG")
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 
 def run():
-    """ basic run function """
-    pass
+    """basic run function"""
+    data_folder = os.path.abspath("../data")
+    image_status = validate_image_dataset(
+        dataset_path=data_folder,
+        validate_mdata=True,
+    )
 
-if __name__ == "__main__": run()
+    metadata_status = validate_dataset_metadata(
+        dataset_path=data_folder,
+        metadata_files=[
+            "acquisition.json",
+            "instrument.json",
+            "data_description.json",
+            "subject.json",
+            # "procedures.json"
+        ],
+    )
+    logger.info(f"Dataset image validation passed? -> {image_status}")
+    logger.info(f"Dataset metadata validation passed? -> {metadata_status}")
+
+
+if __name__ == "__main__":
+    run()
