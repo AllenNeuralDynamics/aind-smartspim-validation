@@ -22,12 +22,8 @@ logger.setLevel(logging.INFO)
 def run():
     """basic run function"""
     data_folder = os.path.abspath("../data")
-    image_status = validate_image_dataset(
-        dataset_path=data_folder,
-        validate_mdata=True,
-    )
 
-    metadata_status = validate_dataset_metadata(
+    metadata_status, missing_files = validate_dataset_metadata(
         dataset_path=data_folder,
         metadata_files=[
             "acquisition.json",
@@ -37,8 +33,20 @@ def run():
             # "procedures.json"
         ],
     )
-    logger.info(f"Dataset image validation passed? -> {image_status}")
-    logger.info(f"Dataset metadata validation passed? -> {metadata_status}")
+
+    if not metadata_status:
+        raise ValueError(f"The following metadata is missing {missing_files}.")
+
+    image_status = validate_image_dataset(
+        dataset_path=data_folder,
+        validate_mdata=True,
+    )
+
+    if not image_status:
+        raise ValueError("Error validating image dataset.")
+
+    logger.info(f"Dataset image validation check -> passed")
+    logger.info(f"Dataset metadata validation check -> passed")
 
 
 if __name__ == "__main__":
