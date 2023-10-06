@@ -17,6 +17,12 @@ RUN cd /home && \
 
 ENV PATH "/home/Image-ExifTool-12.57:$PATH"
 
+# Creating a new conda environment for argschema python bug
+RUN conda create -n smartspim_validation python=3.8
+
+# Make RUN commands use the new environment:
+SHELL ["conda", "run", "-n", "smartspim_validation", "/bin/bash", "-c"]
+
 RUN pip install -U --no-cache-dir \
     tqdm==4.64.1 \
     PyExifTool==0.5.5
