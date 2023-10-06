@@ -18,4 +18,5 @@ RUN cd /home && \
 ENV PATH "/home/Image-ExifTool-12.57:$PATH"
 
 RUN pip install -U --no-cache-dir \
-    tqdm==4.64.1
+    tqdm==4.64.1 \
+    PyExifTool==0.5.5

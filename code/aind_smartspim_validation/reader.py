@@ -4,7 +4,10 @@ Dataset reader
 
 import os
 from enum import Enum
-
+from .types import PathLike
+from typing import List
+import re
+from pathlib import Path
 
 class SmartSPIMReader:
     """Reader for smartspim datasets"""
