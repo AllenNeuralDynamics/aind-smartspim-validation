@@ -23,6 +23,8 @@ def run():
     """basic run function"""
     data_folder = os.path.abspath("../data")
 
+    logger.info("Starting metadata validation")
+
     metadata_status, missing_files = validate_dataset_metadata(
         dataset_path=data_folder,
         metadata_files=[
@@ -36,6 +38,8 @@ def run():
 
     if not metadata_status:
         raise ValueError(f"The following metadata is missing {missing_files}.")
+
+    logger.info("Validating image metadata")
 
     image_status = validate_image_dataset(
         dataset_path=data_folder,
