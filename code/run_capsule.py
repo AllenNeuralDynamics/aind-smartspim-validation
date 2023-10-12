@@ -43,7 +43,7 @@ def run():
 
     image_status = validate_image_dataset(
         dataset_path=data_folder,
-        validate_mdata=False,
+        validate_image_metadata=False,
     )
 
     if not image_status:
