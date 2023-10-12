@@ -25,4 +25,6 @@ SHELL ["conda", "run", "-n", "smartspim_validation", "/bin/bash", "-c"]
 
 RUN pip install -U --no-cache-dir \
     tqdm==4.64.1 \
-    PyExifTool==0.5.5
+    PyExifTool==0.5.5 \
+    psutil==5.9.5 \
+    matplotlib==3.7.3
