@@ -39,6 +39,7 @@ def create_logger(output_log_path: str) -> logging.Logger:
     logging.disable("DEBUG")
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
+    return logger
 
 
 def run():
