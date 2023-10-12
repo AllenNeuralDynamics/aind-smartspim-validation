@@ -1,27 +1,52 @@
 """ top level run script """
 import logging
 import os
-
+from datetime import datetime
 from aind_smartspim_validation.validate import (validate_dataset_metadata,
                                                 validate_image_dataset)
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s : %(message)s",
-    datefmt="%Y-%m-%d %H:%M",
-    handlers=[
-        logging.StreamHandler(),
-        # logging.FileHandler("test.log", "a"),
-    ],
-)
-logging.disable("DEBUG")
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+def create_logger(output_log_path: str) -> logging.Logger:
+    """
+    Creates a logger that generates
+    output logs to a specific path.
+
+    Parameters
+    ------------
+    output_log_path: PathLike
+        Path where the log is going
+        to be stored
+
+    Returns
+    -----------
+    logging.Logger
+        Created logger pointing to
+        the file path.
+    """
+    CURR_DATE_TIME = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    LOGS_FILE = f"{output_log_path}/validation_log_{CURR_DATE_TIME}.log"
+
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s : %(message)s",
+        datefmt="%Y-%m-%d %H:%M",
+        handlers=[
+            logging.StreamHandler(),
+            logging.FileHandler(LOGS_FILE, "a"),
+        ],
+        force=True,
+    )
+
+    logging.disable("DEBUG")
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
 
 
 def run():
     """basic run function"""
     data_folder = os.path.abspath("../data")
+    results_folder = os.path.abspath("../results")
+
+    logger = create_logger(output_log_path=results_folder)
 
     logger.info("Starting metadata validation")
 
