@@ -268,7 +268,7 @@ def print_system_information(logger: logging.Logger):
 def run():
     """basic run function"""
 
-    data_folder = os.path.abspath("../data/SmartSPIM_698928_2023-10-03_04-48-54")
+    data_folder = os.path.abspath("../data")
     results_folder = os.path.abspath("../results")
 
     logger = create_logger(output_log_path=results_folder)
