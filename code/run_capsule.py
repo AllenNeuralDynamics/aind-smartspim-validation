@@ -85,7 +85,7 @@ def run():
             "data_description.json",
             "subject.json",
             "derivatives/metadata.json",
-            "derivatives/DarkMaster.tif",
+            "derivatives/DarkMaster_cropped.tif",
             # "procedures.json"
         ],
     )
