@@ -15,7 +15,6 @@ from tqdm import tqdm
 
 from .reader import SmartSPIMReader
 from .types import PathLike
-from .utilities import save_string_to_txt
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -408,9 +407,7 @@ def validate_image_dataset(
     image_metadata_format = image_metadata_format.upper()
     dataset_path = Path(dataset_path)
 
-    dataset_structure = read_image_directory_structure(
-        dataset_path.joinpath("SmartSPIM")
-    )
+    dataset_structure = read_image_directory_structure(dataset_path.joinpath("SPIM"))
 
     images_per_channel = []
 
@@ -448,66 +445,3 @@ def validate_image_dataset(
                 return False
 
     return True
-
-
-def main():
-    """
-    Nothing fancy, but a script that check the status
-    of each dataset in terms of # of tiles.
-    """
-
-    BASE_PATH = Path("PATH")
-    # BASE_PATH = Path("/net/aind.vast01/aind/SmartSPIM_Data/")
-    # DATASET_PATH = BASE_PATH.joinpath("SmartSPIM_643634_2023-02-10_12-48-15/SmartSPIM")
-    # DATASET_PATH = BASE_PATH.joinpath("SmartSPIM_AK015_2023-02-22_02-02-29/SmartSPIM")
-
-    error_dataset_paths = "output_folder/file.txt"
-
-    search_datasets = True
-    validate_mdata = False
-    dataset_paths = []
-
-    if search_datasets:
-        dataset_paths = SmartSPIMReader.read_smartspim_folders(BASE_PATH)
-
-    else:
-        dataset_paths = [
-            # Path where the channels are
-            # "SmartSPIM_634571_2022-08-24_19-14-17/SmartSPIM"
-            "20230220_12_16_27_642480"
-        ]
-
-    datasets_with_problems = ["Datasets with errors:\n"]
-    check_paths = ["\nCheck paths:\n"]
-
-    for dataset_path in dataset_paths:
-        val_path = Path(BASE_PATH.joinpath(dataset_path))
-
-        logger.info(f"Validating dataset: {dataset_path}")
-
-        try:
-            tile_status = validate_image_dataset(
-                val_path, validate_image_metadata=validate_mdata
-            )
-
-        except FileNotFoundError as e:
-            logger.error(
-                f"[!!] Check path {val_path}. This folder MUST have the channels!"
-            )
-            check_paths.append(str(val_path))
-
-        if not tile_status:
-            logger.error(f"\n[+] Dataset {dataset_path} has problems in tiles")
-            datasets_with_problems.append(str(dataset_path))
-
-        else:
-            logger.info(f"\n[+] Dataset {dataset_path} does not have issues")
-
-    # Saving datasets with errors
-    join_lists = datasets_with_problems + check_paths
-    txt = "\n".join(join_lists)
-    save_string_to_txt(txt, error_dataset_paths)
-
-
-if __name__ == "__main__":
-    main()
