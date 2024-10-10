@@ -407,7 +407,17 @@ def validate_image_dataset(
     image_metadata_format = image_metadata_format.upper()
     dataset_path = Path(dataset_path)
 
-    dataset_structure = read_image_directory_structure(dataset_path.joinpath("SPIM"))
+    image_path = dataset_path.joinpath("SPIM")
+
+    if not image_path.exists():
+        # If it's not the new version, it's the old SmartSPIM
+        image_path = dataset_path.joinpath("SmartSPIM")
+        print("Using old version with SmartSPIM on it.")
+
+    if not image_path.exist():
+        raise FileNotFoundError(f"No SmartSPIM or SPIM paths where found")
+
+    dataset_structure = read_image_directory_structure(image_path)
 
     images_per_channel = []
 
