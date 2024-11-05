@@ -1,8 +1,10 @@
 """ top level run script """
+
 import logging
 import multiprocessing
 import os
 from datetime import datetime
+from pathlib import Path
 
 import aind_smartspim_validation.utilities as utils
 from aind_smartspim_validation.validate import (validate_dataset_metadata,
@@ -90,9 +92,24 @@ def run():
         ],
     )
 
+    smartspim_name = None
+    if "data_description.json" not in missing_files:
+        data_description_dict = utils.read_json_as_dict(
+            str(Path(data_folder).joinpath("data_description.json"))
+        )
+        smartspim_name = data_description_dict.get("name")
+
+    elif "subject.json" not in missing_files:
+        subject_dict = utils.read_json_as_dict(
+            str(Path(data_folder).joinpath("subject.json"))
+        )
+        smartspim_name = subject_dict.get("subject_id")
+
     if not metadata_status:
         utils.stop_child_process(profile_process)
-        raise ValueError(f"The following metadata is missing {missing_files}.")
+        raise ValueError(
+            f"The following metadata is missing {missing_files} for SmartSPIM {smartspim_name}"
+        )
 
     logger.info("Validating image metadata")
 
