@@ -221,7 +221,10 @@ def print_system_information(logger: logging.Logger):
     sep = "=" * 40
     logger.info(f"{sep} Code Ocean Information {sep}")
     logger.info(f"Code Ocean assigned cores: {get_code_ocean_cpu_limit()}")
-    logger.info(f"Code Ocean assigned memory: {get_size(co_memory)}")
+
+    if co_memory:
+        logger.info(f"Code Ocean assigned memory: {get_size(co_memory)}")
+
     logger.info(f"Computation ID: {os.environ.get('CO_COMPUTATION_ID')}")
     logger.info(f"Capsule ID: {os.environ.get('CO_CAPSULE_ID')}")
     logger.info(f"Is pipeline execution?: {bool(os.environ.get('AWS_BATCH_JOB_ID'))}")
