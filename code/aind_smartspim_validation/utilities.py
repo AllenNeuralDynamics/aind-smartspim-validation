@@ -207,7 +207,9 @@ def print_system_information(logger: logging.Logger):
     logger: logging.Logger
         Logger object
     """
-    co_memory = int(os.environ.get("CO_MEMORY"))
+    co_memory = os.environ.get("CO_MEMORY")
+    co_memory = int(co_memory) if co_memory else None
+
     # System info
     sep = "=" * 40
     logger.info(f"{sep} Code Ocean Information {sep}")
