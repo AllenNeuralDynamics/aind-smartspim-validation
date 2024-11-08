@@ -414,7 +414,7 @@ def validate_image_dataset(
         image_path = dataset_path.joinpath("SmartSPIM")
         print("Using old version with SmartSPIM on it.")
 
-    if not image_path.exist():
+    if not image_path.exists():
         raise FileNotFoundError(f"No SmartSPIM or SPIM paths where found")
 
     dataset_structure = read_image_directory_structure(image_path)
